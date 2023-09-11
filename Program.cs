@@ -3,11 +3,17 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Rater.Data;
 using Rater.Models;
+using Azure.Identity;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
+var config = builder.Configuration;
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("RaterKeyVaultUri"));
+config.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
+var connectionString = config.GetConnectionString("DefaultConnection") 
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
@@ -23,6 +29,18 @@ builder.Services.AddDefaultIdentity<User>(options => {
 }).AddEntityFrameworkStores<ApplicationDbContext>();
     
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddAuthentication()
+   .AddGoogle(options =>
+   {
+       options.ClientId = config["Authentication:Google:ClientId"];
+       options.ClientSecret = config["Authentication:Google:ClientSecret"];
+   });
+   //.AddMicrosoftAccount(microsoftOptions =>
+   //{
+   //    microsoftOptions.ClientId = config["Authentication:Microsoft:ClientId"];
+   //    microsoftOptions.ClientSecret = config["Authentication:Microsoft:ClientSecret"];
+   //});
 
 var app = builder.Build();
 
@@ -41,11 +59,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapDefaultControllerRoute();
 app.MapRazorPages();
 
 app.Run();
