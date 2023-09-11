@@ -1,4 +1,5 @@
-﻿namespace Rater.Models
+﻿#nullable disable
+namespace Rater.Models
 {
     public class Tag
     {
