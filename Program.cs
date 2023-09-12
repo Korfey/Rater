@@ -8,7 +8,6 @@ using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
-
 var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("RaterKeyVaultUri"));
 config.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
 var connectionString = config.GetConnectionString("DefaultConnection") 
