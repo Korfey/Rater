@@ -25,13 +25,21 @@ namespace Rater.Data
         {
             base.OnModelCreating(builder);
 
+            ConfigureUser(builder);
             ConfigureComment(builder);
             ConfigureLike(builder);
             ConfigureRating(builder);
             ConfigureReview(builder);
             ConfigureReviewTag(builder);
             ConfigureTag(builder);
-        }   
+        }
+
+        private static void ConfigureUser(ModelBuilder builder)
+        {
+            builder.Entity<User>()
+                .Property(u => u.UserName)
+                .HasMaxLength(30);
+        }
 
         private static void ConfigureComment(ModelBuilder builder)
         {
@@ -89,6 +97,12 @@ namespace Rater.Data
             builder.Entity<Review>()
                 .Property(r => r.Title)
                 .HasColumnType("nvarchar(255)");
+
+            builder.Entity<Review>()
+                .Property(r=>r.Group)
+                .HasConversion(
+                g => g.ToString(),
+           g => (Group)Enum.Parse(typeof(Group), g));
         }
 
         private static void ConfigureReviewTag(ModelBuilder builder)

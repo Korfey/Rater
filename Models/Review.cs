@@ -10,6 +10,7 @@ namespace Rater.Models
         public string Title { get; set; }
         public string Content { get; set; }
         public DateTime Created { get; set; }
+        public Group Group { get; set; }
 
         public User User { get; set; }
         public Product Product { get; set; }
@@ -19,5 +20,12 @@ namespace Rater.Models
         public ICollection<Comment> Comments { get; } = new List<Comment>();
         public ICollection<Like> Likes { get; } = new HashSet<Like>(); 
         public ICollection<Rating> Ratings { get; } = new HashSet<Rating>();
+    }
+
+    public enum Group
+    {
+        Movie,
+        Game, 
+        Book
     }
 }

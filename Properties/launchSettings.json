@@ -1,43 +1,34 @@
 {
+  "profiles": {
+    "https": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "DEVELOPMENT"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:7200;http://localhost:5044"
+    },
+    "http": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "DEVELOPMENT"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5044"
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true
+    }
+  },
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
       "applicationUrl": "http://localhost:25146",
       "sslPort": 44303
-    }
-  },
-  "profiles": {
-    "http": {
-      "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "applicationUrl": "http://localhost:5044",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "RaterKeyVaultUri": "https://rater-app-keyvault.vault.azure.net/",
-        "AZURE_USERNAME": "madenovartur@gmail.com"
-      }
-    },
-    "https": {
-      "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "applicationUrl": "https://localhost:7200;http://localhost:5044",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "RaterKeyVaultUri": "https://rater-app-keyvault.vault.azure.net/",
-        "AZURE_USERNAME": "madenovartur@gmail.com"
-      }
-    },
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "RaterKeyVaultUri": "https://rater-app-keyvault.vault.azure.net/",
-        "AZURE_USERNAME": "madenovartur@gmail.com"
-      }
     }
   }
 }
