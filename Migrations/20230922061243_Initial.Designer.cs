@@ -12,8 +12,8 @@ using Rater.Data;
 namespace Rater.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230915114339_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230922061243_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -106,12 +106,10 @@ namespace Rater.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -147,12 +145,10 @@ namespace Rater.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -164,19 +160,17 @@ namespace Rater.Migrations
 
             modelBuilder.Entity("Rater.Models.Comment", b =>
                 {
-                    b.Property<int>("CommentId")
+                    b.Property<Guid>("CommentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommentId"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Created")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
 
-                    b.Property<int>("ReviewId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ReviewId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)");
@@ -206,8 +200,8 @@ namespace Rater.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ReviewId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ReviewId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ImageId");
 
@@ -218,8 +212,8 @@ namespace Rater.Migrations
 
             modelBuilder.Entity("Rater.Models.Like", b =>
                 {
-                    b.Property<int>("ReviewId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ReviewId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -249,8 +243,8 @@ namespace Rater.Migrations
 
             modelBuilder.Entity("Rater.Models.Rating", b =>
                 {
-                    b.Property<int>("ReviewId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ReviewId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -267,11 +261,9 @@ namespace Rater.Migrations
 
             modelBuilder.Entity("Rater.Models.Review", b =>
                 {
-                    b.Property<int>("ReviewId")
+                    b.Property<Guid>("ReviewId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReviewId"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
@@ -310,8 +302,8 @@ namespace Rater.Migrations
 
             modelBuilder.Entity("Rater.Models.ReviewTag", b =>
                 {
-                    b.Property<int>("ReviewId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ReviewId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("TagId")
                         .HasColumnType("int");
@@ -390,9 +382,9 @@ namespace Rater.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Username")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                    b.Property<string>("UserName")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
 
@@ -409,8 +401,8 @@ namespace Rater.Migrations
 
             modelBuilder.Entity("ReviewTag", b =>
                 {
-                    b.Property<int>("ReviewsReviewId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ReviewsReviewId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("TagsTagId")
                         .HasColumnType("int");

@@ -1,15 +1,33 @@
 ﻿#nullable disable
+using Azure.Search.Documents.Indexes;
+using Azure.Search.Documents.Indexes.Models;
+
 namespace Rater.Models
 {
     public class Review
     {
-        public int ReviewId { get; set; }
+        [SimpleField(IsFilterable = true, IsKey = true)]
+        public Guid ReviewId { get; set; }
+
+        [SimpleField(IsFilterable = true)]
         public int UserId { get; set; }
+
+        [SimpleField(IsFilterable = true)]
         public int ProductId { get; set; }
+
+        [SimpleField(IsFilterable = true, IsSortable = true, IsFacetable = true)]
         public byte Rating { get; set; }
+
+        [SearchableField(IsSortable = true)]
         public string Title { get; set; }
+
+        [SearchableField(AnalyzerName = LexicalAnalyzerName.Values.StandardLucene)]
         public string Content { get; set; }
+
+        [SimpleField(IsFilterable = true, IsSortable = true, IsFacetable = true)]
         public DateTime Created { get; set; }
+
+        [SearchableField(IsFilterable = true, IsSortable = true, IsFacetable = true)]
         public Group Group { get; set; }
 
         public User User { get; set; }

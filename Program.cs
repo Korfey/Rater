@@ -17,12 +17,16 @@ using Microsoft.Extensions.Azure;
 using System.Diagnostics;
 using System.Net;
 using Microsoft.CodeAnalysis.Completion;
+using Azure;
+using Azure.Search.Documents;
+using Azure.Search.Documents.Indexes;
+using Rater.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 
 config.AddAzureAppConfiguration(options =>
-{
+{   
     options.Connect(config.GetConnectionString("AppConfig"))
     .ConfigureKeyVault(kv =>
     {
@@ -39,7 +43,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<User>(options =>
+builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
 {
     options.User.RequireUniqueEmail = true;
     options.User.AllowedUserNameCharacters = config["AllowedCharacters"]!;
@@ -48,11 +52,17 @@ builder.Services.AddDefaultIdentity<User>(options =>
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireLowercase = false;
     options.Password.RequireUppercase = false;
-}).AddEntityFrameworkStores<ApplicationDbContext>();
+}).AddEntityFrameworkStores<ApplicationDbContext>()
+.AddRoles<IdentityRole<int>>()
+.AddDefaultUI();
+
+var searchServiceUri = config["searchUrl"];
+var queryApiKey = config["SearchServiceQueryApiKey"];
+var indexName = config["searchIndexName"];
+SearchController.Initialize(searchServiceUri!, queryApiKey!, indexName!);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
-
 builder.Services.AddAuthentication()
     .AddGoogle(options =>
     {
@@ -88,5 +98,14 @@ app.UseAuthorization();
 
 app.MapDefaultControllerRoute();
 app.MapRazorPages();
+
+using(var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
+    string role = "Administrator";
+    
+    if (!await roleManager.RoleExistsAsync(role))
+        await roleManager.CreateAsync(new IdentityRole<int>(role));
+}
 
 app.Run();
